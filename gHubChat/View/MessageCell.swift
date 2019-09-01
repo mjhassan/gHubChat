@@ -13,8 +13,8 @@ class MessageCell: UICollectionViewCell {
     static let identifier = String(describing: MessageCell.self)
     
     static let IMG_INSETS = UIEdgeInsets(top: 18, left: 20, bottom: 18, right: 20)
-    static let left_bubble = UIImage(named: "left_bubble")!.resizableImage(withCapInsets: IMG_INSETS).withRenderingMode(.alwaysTemplate)
-    static let right_bubble = UIImage(named: "right_bubble")!.resizableImage(withCapInsets: IMG_INSETS).withRenderingMode(.alwaysTemplate)
+    static let left_bubble = UIImage(named: "left_bubble")!.resizableImage(withCapInsets: IMG_INSETS).withRenderingMode(.alwaysOriginal)
+    static let right_bubble = UIImage(named: "right_bubble")!.resizableImage(withCapInsets: IMG_INSETS).withRenderingMode(.alwaysOriginal)
     
     private let offset: CGFloat = 4.0
     private let margin: CGFloat = 10.0
@@ -53,10 +53,6 @@ class MessageCell: UICollectionViewCell {
     
     private var isRecieved: Bool {
         return message?.isRecieved ?? false
-    }
-    
-    private var tintColorBubble: UIColor {
-        return isRecieved ? UIColor(white: 0.7, alpha: 1):UIColor(red: 79/255, green: 143/255, blue: 234/255, alpha: 1)
     }
     
     private var bubble: UIImage {
@@ -126,8 +122,7 @@ class MessageCell: UICollectionViewCell {
         msgFrame.size.width -= (margin+offset/2)
         messageView.frame   = msgFrame
         
-        // update bubble and bubble color
+        // update bubble
         bubbleImageView.image = bubble
-        bubbleImageView.tintColor = tintColorBubble
     }
 }

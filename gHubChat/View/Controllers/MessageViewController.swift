@@ -86,12 +86,12 @@ private extension MessageViewController {
     
     func keyboardEventObserver() {
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardFrameChangeNotfHandler(_:)),
+                                               selector: #selector(keyboardFrameChangeHandler(_:)),
                                                name: UIResponder.keyboardWillShowNotification,
                                                object: nil)
         
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardFrameChangeNotfHandler(_:)),
+                                               selector: #selector(keyboardFrameChangeHandler(_:)),
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
     }
@@ -100,7 +100,7 @@ private extension MessageViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
-    @objc func keyboardFrameChangeNotfHandler(_ notification: Notification) {
+    @objc func keyboardFrameChangeHandler(_ notification: Notification) {
         guard let userInfo = notification.userInfo else { return }
         
         let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
