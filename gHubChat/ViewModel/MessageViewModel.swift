@@ -73,4 +73,9 @@ class MessageViewModel: MessageViewModelProtocol {
         
         onUpdateMessage?(lastIndexPath)
     }
+    
+    deinit {
+        print("deinit - \(String(describing: self))")
+        messages.removeAll()
+    }
 }

@@ -21,6 +21,8 @@ extension UIViewController {
     }
     
     func showSpinner(onView : UIView) {
+        if let _spinner = spinner, _spinner.isDescendant(of: onView) { return }
+        
         let spinnerView = UIView(frame: onView.bounds)
         spinnerView.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
         

@@ -12,7 +12,8 @@ class Services: ServiceProtocol {
     typealias callback = (_ data: Data?, _ error: Error?) -> Void
     
     func get( url: URL, callback: @escaping callback ) {
-        URLSession.shared.dataTask(with: url) { (data, _, error) in
+        let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 30)
+        URLSession.shared.dataTask(with: request) { (data, _, error) in
             callback(data, error)
             }.resume()
     }

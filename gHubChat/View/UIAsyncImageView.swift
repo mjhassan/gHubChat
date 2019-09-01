@@ -9,9 +9,6 @@
 import UIKit
 
 class UIAsyncImageView: UIImageView {
-    static let imageCache = NSCache<AnyObject, AnyObject>()
-    
-    private let service: ServiceProtocol = Services()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -30,12 +27,7 @@ class UIAsyncImageView: UIImageView {
         
         imageUrl = url
         
-        if let cachedImage = UIAsyncImageView.imageCache.object(forKey: url as AnyObject) as? UIImage {
-            setImage(cachedImage)
-            return
-        }
-        
-        service.get(url: url) { [weak self] (data, error) in
+        Services().get(url: url) { [weak self] (data, error) in
             // sanity check
             guard let _imageUrl = self?.imageUrl, _imageUrl == url else {
                 return
@@ -47,7 +39,6 @@ class UIAsyncImageView: UIImageView {
             }
             
             self?.setImage(image)
-            UIAsyncImageView.imageCache.setObject(image, forKey: url as AnyObject)
         }
     }
     
