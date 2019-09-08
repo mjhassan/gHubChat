@@ -98,17 +98,14 @@ class Store: StoreProtocol {
     
     // MARK: - local saving support
     func saveLastMessage(_ msg: String, for userId: Int) {
-        localStorage.set(msg, forKey: "\(userId)")
-        localStorage.synchronize()
+        localStorage["\(userId)"] = msg
     }
     
     func lastMessage(for userId: Int) -> String? {
-        return localStorage.string(forKey: "\(userId)")
+        return localStorage["\(userId)"]
     }
     
     func clearAllLastMessage() {
-        let dictionary = localStorage.dictionaryRepresentation()
-        dictionary.keys.forEach { localStorage.removeObject(forKey: $0) }
-        localStorage.synchronize()
+        localStorage.clearAll()
     }
 }
