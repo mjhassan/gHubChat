@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		082C71232324990500CA2EFF /* NSCoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082C71222324990500CA2EFF /* NSCoderExtension.swift */; };
 		08CC8E20231192CF004C9157 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0834E84C230B1D2E00B2EFAD /* Message.swift */; };
 		08CC8E21231192CF004C9157 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AC8BD0230AEF1000E95F5F /* User.swift */; };
 		08CC8E22231192CF004C9157 /* InitialViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCAEC9230C6FFF001D9BC3 /* InitialViewDelegate.swift */; };
@@ -57,6 +58,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		082C71222324990500CA2EFF /* NSCoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCoderExtension.swift; sourceTree = "<group>"; };
 		0834E84A230B028300B2EFAD /* MessageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewModel.swift; sourceTree = "<group>"; };
 		0834E84C230B1D2E00B2EFAD /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		085BE563230D88F800C26B4C /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 				08F9CE02230BDC4C0046DCCE /* UICollectionViewCellExtensions.swift */,
 				08F9CDF6230B9CA00046DCCE /* UIViewExtensions.swift */,
 				085BE563230D88F800C26B4C /* UIViewControllerExtensions.swift */,
+				082C71222324990500CA2EFF /* NSCoderExtension.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -419,6 +422,7 @@
 				08CC8E33231192CF004C9157 /* MessageViewModel.swift in Sources */,
 				08CC8E34231192CF004C9157 /* Services.swift in Sources */,
 				08CC8E35231192CF004C9157 /* Store.swift in Sources */,
+				082C71232324990500CA2EFF /* NSCoderExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
