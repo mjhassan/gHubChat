@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08439178231BBB38003FA477 /* URLCacheExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08439177231BBB38003FA477 /* URLCacheExtensions.swift */; };
 		08CC8E20231192CF004C9157 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0834E84C230B1D2E00B2EFAD /* Message.swift */; };
 		08CC8E21231192CF004C9157 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AC8BD0230AEF1000E95F5F /* User.swift */; };
 		08CC8E22231192CF004C9157 /* InitialViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCAEC9230C6FFF001D9BC3 /* InitialViewDelegate.swift */; };
@@ -59,6 +60,7 @@
 /* Begin PBXFileReference section */
 		0834E84A230B028300B2EFAD /* MessageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewModel.swift; sourceTree = "<group>"; };
 		0834E84C230B1D2E00B2EFAD /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		08439177231BBB38003FA477 /* URLCacheExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLCacheExtensions.swift; sourceTree = "<group>"; };
 		085BE563230D88F800C26B4C /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
 		086510BE230AA400008B8DB6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		086510C0230AA400008B8DB6 /* InitialController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialController.swift; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 				08F9CE02230BDC4C0046DCCE /* UICollectionViewCellExtensions.swift */,
 				08F9CDF6230B9CA00046DCCE /* UIViewExtensions.swift */,
 				085BE563230D88F800C26B4C /* UIViewControllerExtensions.swift */,
+				08439177231BBB38003FA477 /* URLCacheExtensions.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -410,6 +413,7 @@
 				08CC8E2A231192CF004C9157 /* UICollectionViewCellExtensions.swift in Sources */,
 				08CC8E2B231192CF004C9157 /* UIViewExtensions.swift in Sources */,
 				08CC8E2C231192CF004C9157 /* UIViewControllerExtensions.swift in Sources */,
+				08439178231BBB38003FA477 /* URLCacheExtensions.swift in Sources */,
 				08CC8E2D231192CF004C9157 /* MessageCell.swift in Sources */,
 				08CC8E2E231192CF004C9157 /* UIAsyncImageView.swift in Sources */,
 				08CC8E2F231192CF004C9157 /* UserCell.swift in Sources */,

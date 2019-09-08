@@ -72,6 +72,7 @@ class InitialViewModel: InitialViewModelProtocol {
     }
     
     private func filterUser() {
+        list.removeAll()
         list = filter.isEmpty ? users:users.filter { $0.login.contains(filter) }
     }
 }
