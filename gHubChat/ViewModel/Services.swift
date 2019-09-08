@@ -8,13 +8,22 @@
 
 import Foundation
 
+enum NetworkError: Error {
+    case unknown
+}
+
 class Services: ServiceProtocol {
-    typealias callback = (_ data: Data?, _ error: Error?) -> Void
+    typealias Callback = (Result<Data, Error>) -> Void
     
-    func get( url: URL, callback: @escaping callback ) {
+    func get( url: URL, completion: @escaping Callback ) {
         let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 30)
         URLSession.shared.dataTask(with: request) { (data, _, error) in
-            callback(data, error)
-            }.resume()
+            guard let data = data, error == nil else {
+                completion(.failure(error ?? NetworkError.unknown))
+                return
+            }
+            
+            completion(.success(data))
+        }.resume()
     }
 }

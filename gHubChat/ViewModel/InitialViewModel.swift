@@ -16,7 +16,7 @@ class InitialViewModel: InitialViewModelProtocol {
     private var list: [User] = []
     
     public var userCount: Int {
-        return list.count//return users.count
+        return list.count
     }
     
     public var lastUserId: Int {
@@ -45,18 +45,18 @@ class InitialViewModel: InitialViewModelProtocol {
         
         delegate?.willStartNetworkActivity()
         
-        Services().get(url: url) { [weak self] (data, error) in
-            guard error == nil, let data = data else {
-                self?.delegate?.didFailedWithError(error)
-                return
+        Services().get(url: url) { [weak self] result in
+            switch result {
+            case .success(let data):
+                self?.decode(data: data)
+            case .failure(let err):
+                self?.delegate?.didFailedWithError(err)
             }
-            
-            self?.decode(data: data)
         }
     }
     
     func user(at index: Int) -> User? {
-        return (index >= 0 && index < userCount) ? list[index]:nil//(index >= 0 && index < userCount) ? users[index]:nil
+        return (index >= 0 && index < userCount) ? list[index]:nil
     }
     
     private func decode(data: Data) {

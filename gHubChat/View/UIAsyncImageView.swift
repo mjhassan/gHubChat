@@ -27,18 +27,21 @@ class UIAsyncImageView: UIImageView {
         
         imageUrl = url
         
-        Services().get(url: url) { [weak self] (data, error) in
+        Services().get(url: url) { [weak self] result in
             // sanity check
             guard let _imageUrl = self?.imageUrl, _imageUrl == url else {
                 return
             }
             
             // data check
-            guard let data = data, let image = UIImage(data: data) else {
-                return
+            switch result {
+            case .success(let data):
+                if let image = UIImage(data: data) {
+                    self?.setImage(image)
+                }
+            case .failure(let err):
+                print("ERROR: \(err.localizedDescription)")
             }
-            
-            self?.setImage(image)
         }
     }
     
