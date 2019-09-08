@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Message: NSObject, NSCoding, Codable {
+class Message: NSObject, NSCoding {
     let name: String
     let avater_url: String
     let text: String
@@ -32,17 +32,17 @@ class Message: NSObject, NSCoding, Codable {
     
     // stubs
     required init?(coder aDecoder: NSCoder) {
-        self.name       = (aDecoder.decodeObject(forKey: Keys.name) as? String) ?? ""
-        self.avater_url = (aDecoder.decodeObject(forKey: Keys.avater_url) as? String) ?? ""
-        self.text       = (aDecoder.decodeObject(forKey: Keys.text) as? String) ?? ""
-        self.isRecieved = aDecoder.decodeBool(forKey: Keys.isRecieved)
+        self.name       = aDecoder[Keys.name]
+        self.avater_url = aDecoder[Keys.avater_url]
+        self.text       = aDecoder[Keys.text]
+        self.isRecieved = aDecoder[Keys.isRecieved]
     }
     
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(self.name, forKey: Keys.name)
-        aCoder.encode(self.avater_url, forKey: Keys.avater_url)
-        aCoder.encode(self.text, forKey: Keys.text)
-        aCoder.encode(self.isRecieved, forKey: Keys.isRecieved)
+        aCoder[Keys.name]       = self.name
+        aCoder[Keys.avater_url] = self.avater_url
+        aCoder[Keys.text]       = self.text
+        aCoder[Keys.isRecieved] = self.isRecieved
     }
     
     // overrding Equitable
