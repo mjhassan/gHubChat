@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		081DE3F62340C8160081F588 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F32340C8160081F588 /* RxSwift.framework */; };
+		081DE3F72340C8160081F588 /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F32340C8160081F588 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		081DE3F82340C8160081F588 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F42340C8160081F588 /* RxCocoa.framework */; };
+		081DE3F92340C8160081F588 /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F42340C8160081F588 /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		081DE3FA2340C8160081F588 /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F52340C8160081F588 /* RxRelay.framework */; };
+		081DE3FB2340C8160081F588 /* RxRelay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F52340C8160081F588 /* RxRelay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		08439178231BBB38003FA477 /* URLCacheExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08439177231BBB38003FA477 /* URLCacheExtensions.swift */; };
 		08CC8E20231192CF004C9157 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0834E84C230B1D2E00B2EFAD /* Message.swift */; };
 		08CC8E21231192CF004C9157 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AC8BD0230AEF1000E95F5F /* User.swift */; };
@@ -57,7 +63,26 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		081DE3FC2340C8160081F588 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				081DE3F92340C8160081F588 /* RxCocoa.framework in Embed Frameworks */,
+				081DE3F72340C8160081F588 /* RxSwift.framework in Embed Frameworks */,
+				081DE3FB2340C8160081F588 /* RxRelay.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		081DE3F32340C8160081F588 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
+		081DE3F42340C8160081F588 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
+		081DE3F52340C8160081F588 /* RxRelay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRelay.framework; path = Carthage/Build/iOS/RxRelay.framework; sourceTree = "<group>"; };
 		0834E84A230B028300B2EFAD /* MessageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewModel.swift; sourceTree = "<group>"; };
 		0834E84C230B1D2E00B2EFAD /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		08439177231BBB38003FA477 /* URLCacheExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLCacheExtensions.swift; sourceTree = "<group>"; };
@@ -102,6 +127,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				081DE3F82340C8160081F588 /* RxCocoa.framework in Frameworks */,
+				081DE3F62340C8160081F588 /* RxSwift.framework in Frameworks */,
+				081DE3FA2340C8160081F588 /* RxRelay.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,6 +150,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		081DE3F22340C8160081F588 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				081DE3F42340C8160081F588 /* RxCocoa.framework */,
+				081DE3F52340C8160081F588 /* RxRelay.framework */,
+				081DE3F32340C8160081F588 /* RxSwift.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		086510B2230AA400008B8DB6 = {
 			isa = PBXGroup;
 			children = (
@@ -129,6 +167,7 @@
 				086510D2230AA401008B8DB6 /* gHubChatTests */,
 				086510DD230AA401008B8DB6 /* gHubChatUITests */,
 				086510BC230AA400008B8DB6 /* Products */,
+				081DE3F22340C8160081F588 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -279,6 +318,8 @@
 				08CC766C23117B2B0026431F /* Sources */,
 				08CC766D23117B2B0026431F /* Frameworks */,
 				08CC766E23117B2B0026431F /* Resources */,
+				081DE3FC2340C8160081F588 /* Embed Frameworks */,
+				081DE3FD2340C82B0081F588 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -394,6 +435,29 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		081DE3FD2340C82B0081F588 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxRelay.framework",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		08CC766C23117B2B0026431F /* Sources */ = {
@@ -604,6 +668,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Z26XZJBBF2;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = gHubChat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -622,6 +690,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Z26XZJBBF2;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = gHubChat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -7,16 +7,17 @@
 //
 
 import Foundation
+import RxRelay
 
-class InitialViewModel: InitialViewModelProtocol {
-    private let delegate: InitialViewDelegate?
+class InitialViewModel {
     private let URL_TEMP: String = "https://api.github.com/users?since="
     private var startId: Int = 0
-    private var users: [User] = []
-    private var list: [User] = []
+    private var users: BehaviorRelay<[User]>  = BehaviorRelay(value: [])
+    internal var list: BehaviorRelay<[User]>  = BehaviorRelay(value: [])
+    internal var isLoading: PublishRelay<Bool> = PublishRelay()
     
     public var userCount: Int {
-        return list.count//return users.count
+        return list.value.count
     }
     
     public var lastUserId: Int {
@@ -26,12 +27,7 @@ class InitialViewModel: InitialViewModelProtocol {
     public var filter: String = "" {
         didSet {
             filterUser()
-            delegate?.didUpdatedData()
         }
-    }
-    
-    required init(bind delegate: InitialViewDelegate?) {
-        self.delegate = delegate
     }
     
     func loadData(_ startId: Int? = 0) {
@@ -43,36 +39,42 @@ class InitialViewModel: InitialViewModelProtocol {
             return
         }
         
-        delegate?.willStartNetworkActivity()
-        
+        isLoading.accept(true)
         Services().get(url: url) { [weak self] (data, error) in
-            guard error == nil, let data = data else {
-                self?.delegate?.didFailedWithError(error)
-                return
+            guard let _ws = self else { return }
+            
+            guard error == nil,
+                let data = data else {
+                    _ws.isLoading.accept(false)
+                    return
             }
             
-            self?.decode(data: data)
+            let _users = _ws.decode(data: data)
+            
+            _ws.users.accept(_users)
+            _ws.filterUser()
+            _ws.isLoading.accept(false)
         }
     }
     
     func user(at index: Int) -> User? {
-        return (index >= 0 && index < userCount) ? list[index]:nil//(index >= 0 && index < userCount) ? users[index]:nil
+        return (index >= 0 && index < userCount) ? list.value[index]:nil
     }
     
-    private func decode(data: Data) {
+    private func decode(data: Data) -> [User] {
         do {
             let models = try JSONDecoder().decode([User].self, from: data)
-            self.users.append(contentsOf:models)
-            
-            filterUser()
-            self.delegate?.didUpdatedData()
-        } catch let err {
-            self.delegate?.didFailedWithError(err)
+            return models
+        } catch _ {
+            return []
         }
     }
     
     private func filterUser() {
-        list.removeAll()
-        list = filter.isEmpty ? users:users.filter { $0.login.contains(filter) }
+        let result = filter.isEmpty
+            ? users.value
+            : users.value.filter { $0.login.contains(filter)}
+        
+        list.accept(result)
     }
 }
