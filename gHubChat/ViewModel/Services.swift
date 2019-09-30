@@ -9,12 +9,28 @@
 import Foundation
 
 class Services: ServiceProtocol {
-    typealias callback = (_ data: Data?, _ error: Error?) -> Void
+    typealias callback = (Result<Data, NetworkError>) -> Void
     
     func get( url: URL, callback: @escaping callback ) {
         let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 30)
-        URLSession.shared.dataTask(with: request) { (data, _, error) in
-            callback(data, error)
-            }.resume()
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard error == nil else {
+                callback(.failure(.error(error?.localizedDescription ?? "Unknown error occured")))
+                return
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse,
+            httpResponse.statusCode == 403 {
+                callback(.failure(.forbidden))
+                return
+            }
+            
+            guard let data = data else {
+                callback(.failure(.noData))
+                return
+            }
+            
+            callback(.success(data))
+        }.resume()
     }
 }

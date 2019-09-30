@@ -14,6 +14,7 @@
 		081DE3FA2340C8160081F588 /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F52340C8160081F588 /* RxRelay.framework */; };
 		081DE3FB2340C8160081F588 /* RxRelay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F52340C8160081F588 /* RxRelay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		08439178231BBB38003FA477 /* URLCacheExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08439177231BBB38003FA477 /* URLCacheExtensions.swift */; };
+		08BB26FA2341BD66008CEA20 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BB26F92341BD66008CEA20 /* Errors.swift */; };
 		08CC8E20231192CF004C9157 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0834E84C230B1D2E00B2EFAD /* Message.swift */; };
 		08CC8E21231192CF004C9157 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AC8BD0230AEF1000E95F5F /* User.swift */; };
 		08CC8E22231192CF004C9157 /* InitialViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCAEC9230C6FFF001D9BC3 /* InitialViewDelegate.swift */; };
@@ -109,6 +110,7 @@
 		087C6901230D3110006D66B5 /* gHubChat.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = gHubChat.xcdatamodel; sourceTree = "<group>"; };
 		087C6903230D577C006D66B5 /* StoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreTests.swift; sourceTree = "<group>"; };
 		08AC8BD0230AEF1000E95F5F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		08BB26F92341BD66008CEA20 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		08CC767023117B2B0026431F /* gHubChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gHubChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08CC768323117B380026431F /* gHubChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = gHubChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		08CC768E23117B390026431F /* gHubChatUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = gHubChatUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -245,6 +247,7 @@
 			children = (
 				0834E84C230B1D2E00B2EFAD /* Message.swift */,
 				08AC8BD0230AEF1000E95F5F /* User.swift */,
+				08BB26F92341BD66008CEA20 /* Errors.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -468,6 +471,7 @@
 				08CC8E21231192CF004C9157 /* User.swift in Sources */,
 				08CC8E22231192CF004C9157 /* InitialViewDelegate.swift in Sources */,
 				08CC8E23231192CF004C9157 /* InitialViewModelProtocol.swift in Sources */,
+				08BB26FA2341BD66008CEA20 /* Errors.swift in Sources */,
 				08CC8E24231192CF004C9157 /* MessageViewModelProtocol.swift in Sources */,
 				08CC8E25231192CF004C9157 /* ServiceProtocol.swift in Sources */,
 				08CC8E26231192CF004C9157 /* StoreProtocol.swift in Sources */,

@@ -9,5 +9,5 @@
 import Foundation
 
 protocol ServiceProtocol {
-    func get( url: URL, callback: @escaping (_ data: Data?, _ error: Error?) -> Void)
+    func get( url: URL, callback: @escaping (Result<Data, NetworkError>) -> Void)
 }

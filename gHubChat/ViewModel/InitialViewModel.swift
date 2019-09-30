@@ -8,13 +8,15 @@
 
 import Foundation
 import RxRelay
+import RxSwift
 
 class InitialViewModel {
     private let URL_TEMP: String = "https://api.github.com/users?since="
     private var startId: Int = 0
     private var users: BehaviorRelay<[User]>  = BehaviorRelay(value: [])
     internal var list: BehaviorRelay<[User]>  = BehaviorRelay(value: [])
-    internal var isLoading: PublishRelay<Bool> = PublishRelay()
+    internal var query: BehaviorRelay<String> = BehaviorRelay(value: "")
+    internal var isLoading = PublishSubject<Bool>()
     
     public var userCount: Int {
         return list.value.count
@@ -24,10 +26,14 @@ class InitialViewModel {
         return user(at: userCount-1)?.id ?? startId
     }
     
-    public var filter: String = "" {
-        didSet {
-            filterUser()
-        }
+    private let disposeBag = DisposeBag()
+    
+    init() {
+        query
+            .asObservable()
+            .subscribe(onNext: { [weak self] txt in
+                self?.filterUser(txt)
+            }).disposed(by: disposeBag)
     }
     
     func loadData(_ startId: Int? = 0) {
@@ -39,21 +45,21 @@ class InitialViewModel {
             return
         }
         
-        isLoading.accept(true)
-        Services().get(url: url) { [weak self] (data, error) in
+        isLoading.onNext(true)
+        Services().get(url: url) { [weak self] result in
             guard let _ws = self else { return }
             
-            guard error == nil,
-                let data = data else {
-                    _ws.isLoading.accept(false)
-                    return
+            _ws.isLoading.onNext(false)
+            
+            switch result {
+                case .success(let data):
+                    let _users = _ws.decode(data: data)
+                    
+                    _ws.users.accept(_ws.users.value + _users)
+                    _ws.query.accept("")
+                case .failure(let error):
+                    print(error)
             }
-            
-            let _users = _ws.decode(data: data)
-            
-            _ws.users.accept(_users)
-            _ws.filterUser()
-            _ws.isLoading.accept(false)
         }
     }
     
@@ -70,10 +76,10 @@ class InitialViewModel {
         }
     }
     
-    private func filterUser() {
-        let result = filter.isEmpty
+    private func filterUser(_ txt: String = "") {
+        let result = txt.isEmpty
             ? users.value
-            : users.value.filter { $0.login.contains(filter)}
+            : users.value.filter { $0.login.contains(txt)}
         
         list.accept(result)
     }

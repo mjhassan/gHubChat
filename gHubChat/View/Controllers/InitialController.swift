@@ -22,21 +22,15 @@ class InitialController: UIViewController {
         searchBar.placeholder = "Search..."
         searchBar.sizeToFit()
         searchBar.isTranslucent = false
-        searchBar.backgroundImage = AppDelegate.background
+//        searchBar.backgroundImage = AppDelegate.background
         searchBar.autocapitalizationType = .none
         searchBar.returnKeyType = .done
-        searchBar.delegate = self
+//        searchBar.delegate = self
         
         let textField = searchBar.childView(of: UITextField.self)
         textField?.enablesReturnKeyAutomatically = false
         
         return searchBar
-    }()
-    
-    private lazy var viewModel: InitialViewModel = {
-        let viewModel = InitialViewModel()
-        
-        return viewModel
     }()
     
     private lazy var titleView: UIBarButtonItem = {
@@ -46,6 +40,12 @@ class InitialController: UIViewController {
         label.textColor = .white
         
         return UIBarButtonItem(customView: label)
+    }()
+    
+    private lazy var viewModel: InitialViewModel = {
+        let viewModel = InitialViewModel()
+        
+        return viewModel
     }()
     
     private let disposeBag = DisposeBag()
@@ -111,60 +111,48 @@ private extension InitialController {
         })
         .disposed(by: disposeBag)
         
-        tableView.rx.willDisplayCell.subscribe(onNext: { [weak self] cell, indexPath in
-            
-            guard self?.filtering == false,
-                let userCount = self?.viewModel.userCount,
-                let paggingStart = self?.viewModel.lastUserId else {
-                    return
-            }
-            
-            if indexPath.row == (userCount - 1) {
-                self?.viewModel.loadData(paggingStart)
+        tableView.rx.willDisplayCell
+            .subscribe(onNext: { [weak self] cell, indexPath in
+                guard self?.filtering == false,
+                    let userCount = self?.viewModel.userCount,
+                    let paggingStart = self?.viewModel.lastUserId else {
+                        return
+                }
+                
+                if indexPath.row == (userCount - 1) {
+                    self?.viewModel.loadData(paggingStart)
+                }
+            })
+        .disposed(by: disposeBag)
+        
+        tableView.rx.contentOffset.changed.subscribe(onNext: { [weak self] point in
+            if self?.searchBar.isFirstResponder == true && self?.searchBar.text?.isEmpty == true {
+                self?.searchBar.resignFirstResponder()
             }
         })
         .disposed(by: disposeBag)
+        
+        searchBar.rx.textDidBeginEditing.subscribe { [weak self] event in
+            self?.filtering = true
+        }
+        .disposed(by: disposeBag)
+        
+        searchBar.rx.textDidEndEditing.subscribe { [weak self] event in
+            self?.filtering = false
+        }
+        .disposed(by: disposeBag)
+        
+        searchBar.rx.text
+            .orEmpty
+            .throttle(.milliseconds(300), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .map { $0.replacingOccurrences(of: "@", with: "") }
+            .bind(to: viewModel.query)
+            .disposed(by: disposeBag)
+        
+        searchBar.rx.searchButtonClicked.subscribe { [weak self] clicked in
+            self?.searchBar.resignFirstResponder()
+        }
+        .disposed(by: disposeBag)
     }
 }
-
-extension InitialController: UISearchBarDelegate {
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        filtering = true
-    }
-    
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        filtering = false
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange textSearched: String) {
-        viewModel.filter = textSearched.replacingOccurrences(of: "@", with: "")
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-    }
-}
-
-//extension InitialController: InitialViewDelegate {
-//    func didUpdatedData() {
-//        loading = false
-//
-//        DispatchQueue.main.async { [unowned self] in
-//            self.tableView.reloadData()
-//        }
-//    }
-//
-//    func willStartNetworkActivity() {
-//        loading = true
-//    }
-//
-//    func didFailedWithError(_ error: Error?) {
-//        loading = false
-//
-//        let alert = UIAlertController(title: "ERROR", message: error?.localizedDescription ?? "An unknown error occurred", preferredStyle: .alert)
-//        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-//        DispatchQueue.main.async { [unowned self] in
-//            self.present(alert, animated: true, completion: nil)
-//        }
-//    }
-//}
