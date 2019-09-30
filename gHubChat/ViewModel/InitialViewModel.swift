@@ -79,7 +79,7 @@ class InitialViewModel {
     private func filterUser(_ txt: String = "") {
         let result = txt.isEmpty
             ? users.value
-            : users.value.filter { $0.login.contains(txt)}
+            : users.value.filter { $0.login.contains(txt) }
         
         list.accept(result)
     }
