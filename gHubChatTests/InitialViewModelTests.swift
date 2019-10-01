@@ -16,7 +16,7 @@ class InitialViewModelTests: XCTestCase {
     
     override func setUp() {
         delegate = MockInitialViewDelegate()
-        mockedVM = InitialViewModel(bind: delegate)
+//        mockedVM = InitialViewModel(bind: delegate)
     }
 
     override func tearDown() {

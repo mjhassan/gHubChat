@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class MessageViewController: UIViewController {
 
@@ -16,7 +18,7 @@ class MessageViewController: UIViewController {
     @IBOutlet weak var inputBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var textFieldHeight: NSLayoutConstraint!
     
-    public var viewModel: MessageViewModelProtocol!
+    public var viewModel: MessageViewModel!
     
     private let BOTTOM_PADDING: CGFloat = 40 // magic number constant
     private let TXT_LEFT_PADDING: CGFloat = 12 // magic number constant
@@ -31,14 +33,10 @@ class MessageViewController: UIViewController {
         viewModel.loadStoreMessage()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.title = viewModel.username
-    }
-    
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
-        viewModel.layoutUpdated()
+        
+        viewModel.updatedLastIndex()
     }
     
     @IBAction func sendMessage(_ sender: UIButton) {
@@ -50,96 +48,12 @@ class MessageViewController: UIViewController {
     
     deinit {
         print("What a cruel world!")
-        removeObserver()
     }
 }
 
-private extension MessageViewController {
-    func configureView() {
-        self.messageView.register(MessageCell.self, forCellWithReuseIdentifier: MessageCell.identifier)
-        
-        inputField.textContainer.lineFragmentPadding = TXT_LEFT_PADDING
-        
-        let tap  = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
-        self.messageView.addGestureRecognizer(tap)
-    }
-    
-    func bindDependency() {
-        keyboardEventObserver()
-        viewModel.onUpdateMessage = { [weak self] indexPath in
-            DispatchQueue.main.async {
-                self?.messageView.reloadData()
-                self?.messageView.scrollToItem(at: indexPath, at: .bottom, animated: true)
-            }
-        }
-    }
-    
-    func adjustEmptyInputField(_ hidden: Bool = false) {
-        if !hidden {
-            inputField.text = nil
-            inputField.resignFirstResponder()
-            textFieldHeight.constant = MIN_HEIGHT
-        }
-        
-        placeholderLabel.isHidden = hidden
-    }
-    
-    func keyboardEventObserver() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardFrameChangeHandler(_:)),
-                                               name: UIResponder.keyboardWillShowNotification,
-                                               object: nil)
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardFrameChangeHandler(_:)),
-                                               name: UIResponder.keyboardWillHideNotification,
-                                               object: nil)
-    }
-    
-    func removeObserver() {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    @objc func keyboardFrameChangeHandler(_ notification: Notification) {
-        guard let userInfo = notification.userInfo else { return }
-        
-        let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        let isKeyboardShowing = notification.name == UIResponder.keyboardWillShowNotification
-        
-        var keyboardHeight = keyboardFrame.height
-        if #available(iOS 11.0, *) {
-            keyboardHeight -= self.view.safeAreaInsets.bottom
-        }
-        
-        inputBottomConstraint.constant = isKeyboardShowing ? -keyboardHeight : 0
-        
-        UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations: {
-            self.view.layoutIfNeeded()
-        }, completion: { [weak self] _ in
-            if isKeyboardShowing {
-                self?.viewModel.layoutUpdated()
-            }
-        })
-    }
-}
-
-extension MessageViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.messageCount
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = messageView.dequeueReusableCell(withReuseIdentifier: MessageCell.identifier, for: indexPath) as! MessageCell
-        cell.message = viewModel.message(at: indexPath.item)
-        return cell
-    }
-    
+extension MessageViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.view.endEditing(true)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -152,22 +66,107 @@ extension MessageViewController: UICollectionViewDataSource, UICollectionViewDel
     }
 }
 
-extension MessageViewController: UITextViewDelegate {
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        adjustEmptyInputField(true)
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        adjustEmptyInputField(!textView.text.isEmpty)
-    }
-    
-    func textViewDidChange(_ textView: UITextView) {
-        let padding: CGFloat = 34 // calculated from storyboard
-        let height = ceil(textView.text.estimatedFrame(at: textView.bounds.width, font: textView.font!).height)
-        textFieldHeight.constant = max(height+padding, MIN_HEIGHT)
+private extension MessageViewController {
+    func configureView() {
+        self.messageView.register(MessageCell.self, forCellWithReuseIdentifier: MessageCell.identifier)
         
-        UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations: {
-            self.view.layoutIfNeeded()
-        }, completion: nil)
+        inputField.textContainer.lineFragmentPadding = TXT_LEFT_PADDING
+        
+        messageView.rx.tap
+        let tap  = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
+        self.messageView.addGestureRecognizer(tap)
+    }
+    
+    func bindDependency() {
+        // MARK: RxSwift
+        viewModel.title.bind(to: self.rx.title).disposed(by: viewModel.disposeBag)
+        
+        viewModel.messages.bind(to: messageView.rx.items(cellIdentifier: MessageCell.identifier, cellType: MessageCell.self)) {
+            index, message, cell in
+            cell.message = message
+        }
+        .disposed(by: viewModel.disposeBag)
+        
+        viewModel.lastIndexPath.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] indexPath in
+            guard let _ws = self else { return }
+            
+            _ws.messageView.reloadData()
+            _ws.messageView.scrollToItem(at: indexPath, at: .bottom, animated: true)
+        })
+        .disposed(by: viewModel.disposeBag)
+        
+        messageView.rx.itemSelected.subscribe(onNext: { [weak self] _ in
+            self?.view.endEditing(true)
+        })
+        .disposed(by: viewModel.disposeBag)
+        
+        messageView.rx.setDelegate(self).disposed(by: viewModel.disposeBag)
+        
+        // MARK: input textview bindings
+        inputField.rx.didBeginEditing.subscribe(onNext: { [weak self] _ in
+            self?.adjustEmptyInputField(true)
+        }).disposed(by: viewModel.disposeBag)
+        
+        inputField.rx.didEndEditing.subscribe(onNext: { [weak self] _ in
+            self?.adjustEmptyInputField(!(self?.inputField.text.isEmpty)!)
+        }).disposed(by: viewModel.disposeBag)
+        
+        inputField.rx.text.subscribe(onNext: { [weak self] txt in
+            guard let width = self?.inputField.bounds.width,
+                let font = self?.inputField.font,
+                let height = txt?.estimatedFrame(at: width, font: font).height else { return }
+            
+            let padding: CGFloat = 34
+            self?.textFieldHeight.constant = max(ceil(height)+padding, (self?.MIN_HEIGHT)!)
+            
+            UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations: {
+                self?.view.layoutIfNeeded()
+            }, completion: nil)
+        }).disposed(by: viewModel.disposeBag)
+        
+        // keyboard
+            keyboardHeightObservable()
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] keyboradHeight in
+                self?.inputBottomConstraint.constant = -keyboradHeight
+                
+                UIView.animate(withDuration: 0, delay: 0, options: .curveEaseOut, animations: {
+                    self?.view.layoutIfNeeded()
+                }, completion: { _ in
+                    print("completion: keyboard animation done")
+                    self?.viewModel.updatedLastIndex()
+                })
+            })
+            .disposed(by: viewModel.disposeBag)
+    }
+    
+    func adjustEmptyInputField(_ hidden: Bool = false) {
+        if !hidden {
+            inputField.text = nil
+            inputField.resignFirstResponder()
+            textFieldHeight.constant = MIN_HEIGHT
+        }
+        
+        placeholderLabel.isHidden = hidden
+    }
+    
+    func keyboardHeightObservable() -> Observable<CGFloat> {
+        return Observable.from([
+            NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification).map {
+                notification -> CGFloat in
+                
+                var keyboardHeight: CGFloat = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height ?? 0
+                if #available(iOS 11.0, *) {
+                    keyboardHeight -= self.view.safeAreaInsets.bottom
+                }
+                
+                return keyboardHeight
+            },
+            NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification).map {
+                _ -> CGFloat in
+                0
+            }
+        ])
+        .merge()
     }
 }

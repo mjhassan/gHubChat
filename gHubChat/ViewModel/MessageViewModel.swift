@@ -7,36 +7,48 @@
 //
 
 import Foundation
+import RxSwift
+import RxRelay
 
-class MessageViewModel: MessageViewModelProtocol {
-    private let contact: User
-    private(set) var messages: [Message] = []
+class MessageViewModel {
+    var messages: BehaviorRelay<[Message]> = BehaviorRelay(value: [])
+    let title: BehaviorRelay<String> = BehaviorRelay(value: "")
+    let disposeBag = DisposeBag()
     
-    public var onUpdateMessage: ((IndexPath)->Void)? = nil
+    let lastIndexPath = PublishSubject<IndexPath>()
     
-    public var messageCount: Int {
-        return messages.count
+    private let contact: BehaviorRelay<User>!
+    
+    private var messageCount: Int {
+        return messages.value.count
     }
     
-    public var username: String {
-        return "@\(contact.login)"
+    private var contactId: Int {
+        return contact.value.id
     }
     
-    private var lastIndexPath: IndexPath {
-        return IndexPath(item: self.messages.count - 1, section: 0)
+    private var contactLogin: String {
+        return contact.value.login
+    }
+    
+    private var contactAvatar: String {
+        return contact.value.avatar_url
     }
     
     required init(buddy: User) {
-        self.contact = buddy
+        contact = BehaviorRelay(value: buddy)
+        title.accept("@\(buddy.login)")
     }
     
     func loadStoreMessage() {
-        let history = Store.shared.getMessages(id: contact.id)
-        messages.append(contentsOf: history)
+        let history = Store.shared.getMessages(id: contactId)
+        messages.accept(messages.value + history)
+        
+        updatedLastIndex()
     }
     
     func message(at index: Int) -> Message? {
-        return (index >= 0 && index < messageCount) ? messages[index]:nil
+        return (index >= 0 && index < messageCount) ? messages.value[index]:nil
     }
     
     func sendMessage(_ msg: String) {
@@ -49,33 +61,34 @@ class MessageViewModel: MessageViewModelProtocol {
         triggerAutoReplay(msg)
     }
     
-    func layoutUpdated() {
-        onUpdateMessage?(lastIndexPath)
+    func updatedLastIndex() {
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now()+0.1) { [unowned self] in
+            self.lastIndexPath.on(.next(IndexPath(item: self.messageCount - 1, section: 0)))
+        }
     }
     
     private func triggerAutoReplay(_ msg: String) {
         DispatchQueue.global().asyncAfter(deadline: .now()+1) { [weak self] in
-            guard let weakSelf = self else { return }
+            guard let _ws = self else { return }
             
-            let chat = Message(name: weakSelf.contact.login,
-                               avater_url: weakSelf.contact.avatar_url,
+            let chat = Message(name: _ws.contactLogin,
+                               avater_url: _ws.contactAvatar,
                                text: "\(msg) \(msg)",
                                isRecieved: true)
-            weakSelf.updateMessages(chat)
+            _ws.updateMessages(chat)
         }
     }
     
     private func updateMessages(_ chat: Message) {
-        self.messages.append(chat)
+        self.messages.accept(messages.value + [chat])
         
-        Store.shared.saveMessage(messages, for: contact.id)
-        Store.shared.saveLastMessage(chat.text, for: contact.id)
+        Store.shared.saveMessage(messages.value, for: contactId)
+        Store.shared.saveLastMessage(chat.text, for: contactId)
         
-        onUpdateMessage?(lastIndexPath)
+        updatedLastIndex()
     }
     
     deinit {
         print("deinit - \(String(describing: self))")
-        messages.removeAll()
     }
 }

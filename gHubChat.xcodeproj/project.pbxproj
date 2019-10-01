@@ -7,17 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		081DE3F62340C8160081F588 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F32340C8160081F588 /* RxSwift.framework */; };
-		081DE3F72340C8160081F588 /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F32340C8160081F588 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		081DE3F82340C8160081F588 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F42340C8160081F588 /* RxCocoa.framework */; };
-		081DE3F92340C8160081F588 /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F42340C8160081F588 /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		081DE3FA2340C8160081F588 /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F52340C8160081F588 /* RxRelay.framework */; };
-		081DE3FB2340C8160081F588 /* RxRelay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F52340C8160081F588 /* RxRelay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		08439178231BBB38003FA477 /* URLCacheExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08439177231BBB38003FA477 /* URLCacheExtensions.swift */; };
 		08BB26FA2341BD66008CEA20 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BB26F92341BD66008CEA20 /* Errors.swift */; };
+		08BB26FB2341E09E008CEA20 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F42340C8160081F588 /* RxCocoa.framework */; };
+		08BB26FC2341E09E008CEA20 /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F42340C8160081F588 /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		08BB26FD2341E09E008CEA20 /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F52340C8160081F588 /* RxRelay.framework */; };
+		08BB26FE2341E09E008CEA20 /* RxRelay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F52340C8160081F588 /* RxRelay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		08BB26FF2341E09E008CEA20 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F32340C8160081F588 /* RxSwift.framework */; };
+		08BB27002341E09E008CEA20 /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F32340C8160081F588 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		08CC8E20231192CF004C9157 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0834E84C230B1D2E00B2EFAD /* Message.swift */; };
 		08CC8E21231192CF004C9157 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AC8BD0230AEF1000E95F5F /* User.swift */; };
-		08CC8E22231192CF004C9157 /* InitialViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCAEC9230C6FFF001D9BC3 /* InitialViewDelegate.swift */; };
 		08CC8E23231192CF004C9157 /* InitialViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCAECB230C702A001D9BC3 /* InitialViewModelProtocol.swift */; };
 		08CC8E24231192CF004C9157 /* MessageViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCAECD230C791E001D9BC3 /* MessageViewModelProtocol.swift */; };
 		08CC8E25231192CF004C9157 /* ServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087C68CC230CFCE2006D66B5 /* ServiceProtocol.swift */; };
@@ -65,15 +64,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		081DE3FC2340C8160081F588 /* Embed Frameworks */ = {
+		08BB27012341E09E008CEA20 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				081DE3F92340C8160081F588 /* RxCocoa.framework in Embed Frameworks */,
-				081DE3F72340C8160081F588 /* RxSwift.framework in Embed Frameworks */,
-				081DE3FB2340C8160081F588 /* RxRelay.framework in Embed Frameworks */,
+				08BB26FE2341E09E008CEA20 /* RxRelay.framework in Embed Frameworks */,
+				08BB26FC2341E09E008CEA20 /* RxCocoa.framework in Embed Frameworks */,
+				08BB27002341E09E008CEA20 /* RxSwift.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -115,7 +114,6 @@
 		08CC768323117B380026431F /* gHubChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = gHubChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		08CC768E23117B390026431F /* gHubChatUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = gHubChatUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		08DCAEC6230C691B001D9BC3 /* MessageViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewModelTests.swift; sourceTree = "<group>"; };
-		08DCAEC9230C6FFF001D9BC3 /* InitialViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialViewDelegate.swift; sourceTree = "<group>"; };
 		08DCAECB230C702A001D9BC3 /* InitialViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialViewModelProtocol.swift; sourceTree = "<group>"; };
 		08DCAECD230C791E001D9BC3 /* MessageViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewModelProtocol.swift; sourceTree = "<group>"; };
 		08F9CDF4230B98DB0046DCCE /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
@@ -129,9 +127,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				081DE3F82340C8160081F588 /* RxCocoa.framework in Frameworks */,
-				081DE3F62340C8160081F588 /* RxSwift.framework in Frameworks */,
-				081DE3FA2340C8160081F588 /* RxRelay.framework in Frameworks */,
+				08BB26FD2341E09E008CEA20 /* RxRelay.framework in Frameworks */,
+				08BB26FB2341E09E008CEA20 /* RxCocoa.framework in Frameworks */,
+				08BB26FF2341E09E008CEA20 /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,7 +219,6 @@
 		08DCAEC8230C6FD9001D9BC3 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				08DCAEC9230C6FFF001D9BC3 /* InitialViewDelegate.swift */,
 				08DCAECB230C702A001D9BC3 /* InitialViewModelProtocol.swift */,
 				08DCAECD230C791E001D9BC3 /* MessageViewModelProtocol.swift */,
 				087C68CC230CFCE2006D66B5 /* ServiceProtocol.swift */,
@@ -321,8 +318,8 @@
 				08CC766C23117B2B0026431F /* Sources */,
 				08CC766D23117B2B0026431F /* Frameworks */,
 				08CC766E23117B2B0026431F /* Resources */,
-				081DE3FC2340C8160081F588 /* Embed Frameworks */,
 				081DE3FD2340C82B0081F588 /* ShellScript */,
+				08BB27012341E09E008CEA20 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -469,7 +466,6 @@
 			files = (
 				08CC8E20231192CF004C9157 /* Message.swift in Sources */,
 				08CC8E21231192CF004C9157 /* User.swift in Sources */,
-				08CC8E22231192CF004C9157 /* InitialViewDelegate.swift in Sources */,
 				08CC8E23231192CF004C9157 /* InitialViewModelProtocol.swift in Sources */,
 				08BB26FA2341BD66008CEA20 /* Errors.swift in Sources */,
 				08CC8E24231192CF004C9157 /* MessageViewModelProtocol.swift in Sources */,

@@ -13,7 +13,7 @@ protocol InitialViewModelProtocol {
     var lastUserId: Int { get }
     var filter: String { get set }
     
-    init(bind delegate: InitialViewDelegate?)
+//    init(bind delegate: InitialViewDelegate?)
     
     func loadData(_ startId: Int?)
     func user(at index: Int) -> User?

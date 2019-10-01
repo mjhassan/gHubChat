@@ -138,10 +138,6 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells/>
-                                <connections>
-                                    <outlet property="dataSource" destination="a1b-qI-Zny" id="oNY-xE-dq1"/>
-                                    <outlet property="delegate" destination="a1b-qI-Zny" id="UgG-5M-3Ag"/>
-                                </connections>
                             </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y79-fP-08X" userLabel="Background">
                                 <rect key="frame" x="0.0" y="724" width="414" height="84"/>
@@ -174,9 +170,6 @@
                                                 <integer key="value" value="17"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <outlet property="delegate" destination="a1b-qI-Zny" id="guy-dv-6rE"/>
-                                        </connections>
                                     </textView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aa" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aUW-GI-LTO">
                                         <rect key="frame" x="22" y="8" width="326" height="34"/>
