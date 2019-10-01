@@ -44,6 +44,8 @@
 		08CC8E3B23119307004C9157 /* MockInitialViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087C68D0230D0053006D66B5 /* MockInitialViewDelegate.swift */; };
 		08CC8E3C23119307004C9157 /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087C6903230D577C006D66B5 /* StoreTests.swift */; };
 		08CC8E3D23119324004C9157 /* gHubChatUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086510DE230AA401008B8DB6 /* gHubChatUITests.swift */; };
+		08FAFC972343461200F5616A /* RxGesture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FAFC962343461200F5616A /* RxGesture.framework */; };
+		08FAFC982343461200F5616A /* RxGesture.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 08FAFC962343461200F5616A /* RxGesture.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +72,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				08FAFC982343461200F5616A /* RxGesture.framework in Embed Frameworks */,
 				08BB26FE2341E09E008CEA20 /* RxRelay.framework in Embed Frameworks */,
 				08BB26FC2341E09E008CEA20 /* RxCocoa.framework in Embed Frameworks */,
 				08BB27002341E09E008CEA20 /* RxSwift.framework in Embed Frameworks */,
@@ -120,6 +123,7 @@
 		08F9CDF6230B9CA00046DCCE /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		08F9CDF8230BAA8D0046DCCE /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		08F9CE02230BDC4C0046DCCE /* UICollectionViewCellExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewCellExtensions.swift; sourceTree = "<group>"; };
+		08FAFC962343461200F5616A /* RxGesture.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxGesture.framework; path = Carthage/Build/iOS/RxGesture.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +131,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08FAFC972343461200F5616A /* RxGesture.framework in Frameworks */,
 				08BB26FD2341E09E008CEA20 /* RxRelay.framework in Frameworks */,
 				08BB26FB2341E09E008CEA20 /* RxCocoa.framework in Frameworks */,
 				08BB26FF2341E09E008CEA20 /* RxSwift.framework in Frameworks */,
@@ -153,6 +158,7 @@
 		081DE3F22340C8160081F588 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				08FAFC962343461200F5616A /* RxGesture.framework */,
 				081DE3F42340C8160081F588 /* RxCocoa.framework */,
 				081DE3F52340C8160081F588 /* RxRelay.framework */,
 				081DE3F32340C8160081F588 /* RxSwift.framework */,
@@ -448,6 +454,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxRelay.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxGesture.framework",
 			);
 			outputFileListPaths = (
 			);

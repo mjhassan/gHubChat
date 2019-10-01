@@ -7,21 +7,25 @@
 //
 
 import Foundation
+import RxSwift
+import RxRelay
 
 protocol MessageViewModelProtocol {
-    var onUpdateMessage: ((IndexPath)->Void)? { get set }
-    
-    var messageCount: Int { get }
-    
-    var username: String { get }
+    var messages: BehaviorRelay<[Message]> { get }
+    var title: BehaviorRelay<String>  { get }
+    var lastIndexPath: PublishSubject<IndexPath>  { get }
+    var hiddenTextView: PublishSubject<Bool>  { get }
+    var disposeBag: DisposeBag  { get }
+
     
     init(buddy: User)
-    
     func loadStoreMessage()
-    
     func message(at index: Int) -> Message?
-    
     func sendMessage(_ msg: String)
-    
-    func layoutUpdated()
+    func updatedLastIndex()
+    func hideTextView(_ hidden: Bool)
+}
+
+extension MessageViewModelProtocol {
+    func hideTextView(_ hidden: Bool = false) {}
 }

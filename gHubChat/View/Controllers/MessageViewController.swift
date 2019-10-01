@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxGesture
 
 class MessageViewController: UIViewController {
 
@@ -18,12 +19,13 @@ class MessageViewController: UIViewController {
     @IBOutlet weak var inputBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var textFieldHeight: NSLayoutConstraint!
     
-    public var viewModel: MessageViewModel!
+    public var viewModel: MessageViewModelProtocol!
     
     private let BOTTOM_PADDING: CGFloat = 40 // magic number constant
     private let TXT_LEFT_PADDING: CGFloat = 12 // magic number constant
     private let MIN_HEIGHT: CGFloat = 50 // calculated from storyboard
     
+    //MARK:- system methods
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -42,7 +44,7 @@ class MessageViewController: UIViewController {
     @IBAction func sendMessage(_ sender: UIButton) {
         guard let message = inputField.text, !message.isEmpty else { return }
         
-        adjustEmptyInputField()
+        viewModel.hideTextView()
         viewModel.sendMessage(message)
     }
     
@@ -51,6 +53,7 @@ class MessageViewController: UIViewController {
     }
 }
 
+// MARK:- CollectionView Layout Delegates
 extension MessageViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
@@ -66,21 +69,25 @@ extension MessageViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+// MARK:- private methods
 private extension MessageViewController {
     func configureView() {
-        self.messageView.register(MessageCell.self, forCellWithReuseIdentifier: MessageCell.identifier)
+        messageView.register(MessageCell.self, forCellWithReuseIdentifier: MessageCell.identifier)
         
         inputField.textContainer.lineFragmentPadding = TXT_LEFT_PADDING
-        
-        messageView.rx.tap
-        let tap  = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
-        self.messageView.addGestureRecognizer(tap)
     }
     
     func bindDependency() {
-        // MARK: RxSwift
+        // bind title
         viewModel.title.bind(to: self.rx.title).disposed(by: viewModel.disposeBag)
         
+        // tap gesture on collection view to text input
+        messageView.rx.tapGesture().when(.recognized).subscribe(onNext: { [unowned self] _ in
+            self.view.endEditing(true)
+        })
+        .disposed(by: viewModel.disposeBag)
+        
+        // collection view bindings
         viewModel.messages.bind(to: messageView.rx.items(cellIdentifier: MessageCell.identifier, cellType: MessageCell.self)) {
             index, message, cell in
             cell.message = message
@@ -102,13 +109,13 @@ private extension MessageViewController {
         
         messageView.rx.setDelegate(self).disposed(by: viewModel.disposeBag)
         
-        // MARK: input textview bindings
+        // input textview bindings
         inputField.rx.didBeginEditing.subscribe(onNext: { [weak self] _ in
-            self?.adjustEmptyInputField(true)
+            self?.viewModel.hideTextView(true)
         }).disposed(by: viewModel.disposeBag)
         
         inputField.rx.didEndEditing.subscribe(onNext: { [weak self] _ in
-            self?.adjustEmptyInputField(!(self?.inputField.text.isEmpty)!)
+            self?.viewModel.hideTextView(!(self?.inputField.text.isEmpty)!)
         }).disposed(by: viewModel.disposeBag)
         
         inputField.rx.text.subscribe(onNext: { [weak self] txt in
@@ -124,7 +131,21 @@ private extension MessageViewController {
             }, completion: nil)
         }).disposed(by: viewModel.disposeBag)
         
-        // keyboard
+        // input field configuration bindings
+        viewModel.hiddenTextView
+            .subscribeOn(MainScheduler.instance)
+            .subscribe(onNext: { [weak self] hidden in
+                if !hidden {
+                    self?.inputField.text = nil
+                    self?.inputField.resignFirstResponder()
+                    self?.textFieldHeight.constant = self?.MIN_HEIGHT ?? 0
+                }
+                
+                self?.placeholderLabel.isHidden = hidden
+            })
+            .disposed(by: viewModel.disposeBag)
+        
+        // keyboard handle
             keyboardHeightObservable()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] keyboradHeight in
@@ -140,16 +161,7 @@ private extension MessageViewController {
             .disposed(by: viewModel.disposeBag)
     }
     
-    func adjustEmptyInputField(_ hidden: Bool = false) {
-        if !hidden {
-            inputField.text = nil
-            inputField.resignFirstResponder()
-            textFieldHeight.constant = MIN_HEIGHT
-        }
-        
-        placeholderLabel.isHidden = hidden
-    }
-    
+    // observable for keyboard notifications
     func keyboardHeightObservable() -> Observable<CGFloat> {
         return Observable.from([
             NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification).map {

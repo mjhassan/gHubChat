@@ -10,12 +10,12 @@ import Foundation
 import RxSwift
 import RxRelay
 
-class MessageViewModel {
-    var messages: BehaviorRelay<[Message]> = BehaviorRelay(value: [])
-    let title: BehaviorRelay<String> = BehaviorRelay(value: "")
-    let disposeBag = DisposeBag()
-    
-    let lastIndexPath = PublishSubject<IndexPath>()
+class MessageViewModel: MessageViewModelProtocol {
+    let messages: BehaviorRelay<[Message]>  = BehaviorRelay(value: [])
+    let title: BehaviorRelay<String>        = BehaviorRelay(value: "")
+    let lastIndexPath                       = PublishSubject<IndexPath>()
+    let hiddenTextView                      = PublishSubject<Bool>()
+    let disposeBag                          = DisposeBag()
     
     private let contact: BehaviorRelay<User>!
     
@@ -65,6 +65,10 @@ class MessageViewModel {
         DispatchQueue.global(qos: .background).asyncAfter(deadline: .now()+0.1) { [unowned self] in
             self.lastIndexPath.on(.next(IndexPath(item: self.messageCount - 1, section: 0)))
         }
+    }
+    
+    func hideTextView(_ hidden: Bool = false) {
+        hiddenTextView.on(.next(hidden))
     }
     
     private func triggerAutoReplay(_ msg: String) {
