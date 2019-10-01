@@ -6,8 +6,6 @@
 //  Copyright © 2019 Jahid Hassan. All rights reserved.
 //
 
-// https://saadeloulladi.com/ios-swift-mvvm-rxswift-unit-testing/
-
 import Foundation
 import RxRelay
 import RxSwift

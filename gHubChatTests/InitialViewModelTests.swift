@@ -6,6 +6,9 @@
 //  Copyright © 2019 Jahid Hassan. All rights reserved.
 //
 
+// https://saadeloulladi.com/ios-swift-mvvm-rxswift-unit-testing/
+// https://medium.com/vincit/unit-testing-rxswift-application-f0c6ea460429
+
 import XCTest
 @testable import gHubChat
 
