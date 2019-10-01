@@ -27,5 +27,5 @@ protocol MessageViewModelProtocol {
 }
 
 extension MessageViewModelProtocol {
-    func hideTextView(_ hidden: Bool = false) {}
+    func hideTextView(_ hidden: Bool = false) { hideTextView(hidden) }
 }

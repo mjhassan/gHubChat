@@ -7,13 +7,16 @@
 //
 
 import Foundation
+import RxRelay
+import RxSwift
 
 protocol InitialViewModelProtocol {
+    var list: BehaviorRelay<[User]> { get }
+    var query: BehaviorRelay<String> { get }
+    var isLoading:PublishSubject<Bool> { get }
     var userCount: Int { get }
     var lastUserId: Int { get }
-    var filter: String { get set }
-    
-//    init(bind delegate: InitialViewDelegate?)
+    var disposeBag: DisposeBag { get }
     
     func loadData(_ startId: Int?)
     func user(at index: Int) -> User?

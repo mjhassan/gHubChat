@@ -10,13 +10,13 @@ import Foundation
 import RxRelay
 import RxSwift
 
-class InitialViewModel {
+class InitialViewModel: InitialViewModelProtocol {
     private let URL_TEMP: String = "https://api.github.com/users?since="
     private var startId: Int = 0
-    private var users: BehaviorRelay<[User]>  = BehaviorRelay(value: [])
-    internal var list: BehaviorRelay<[User]>  = BehaviorRelay(value: [])
-    internal var query: BehaviorRelay<String> = BehaviorRelay(value: "")
-    internal var isLoading = PublishSubject<Bool>()
+    private let users: BehaviorRelay<[User]>    = BehaviorRelay(value: [])
+    let list: BehaviorRelay<[User]>             = BehaviorRelay(value: [])
+    let query: BehaviorRelay<String>            = BehaviorRelay(value: "")
+    let isLoading:PublishSubject<Bool>          = PublishSubject<Bool>()
     
     public var userCount: Int {
         return list.value.count
@@ -26,7 +26,7 @@ class InitialViewModel {
         return user(at: userCount-1)?.id ?? startId
     }
     
-    private let disposeBag = DisposeBag()
+    let disposeBag = DisposeBag()
     
     init() {
         query
