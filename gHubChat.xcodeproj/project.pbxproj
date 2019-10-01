@@ -41,7 +41,6 @@
 		08CC8E38231192E7004C9157 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 086510C7230AA401008B8DB6 /* LaunchScreen.storyboard */; };
 		08CC8E3923119307004C9157 /* InitialViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086510D3230AA401008B8DB6 /* InitialViewModelTests.swift */; };
 		08CC8E3A23119307004C9157 /* MessageViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DCAEC6230C691B001D9BC3 /* MessageViewModelTests.swift */; };
-		08CC8E3B23119307004C9157 /* MockInitialViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087C68D0230D0053006D66B5 /* MockInitialViewDelegate.swift */; };
 		08CC8E3C23119307004C9157 /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087C6903230D577C006D66B5 /* StoreTests.swift */; };
 		08CC8E3D23119324004C9157 /* gHubChatUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086510DE230AA401008B8DB6 /* gHubChatUITests.swift */; };
 		08FAFC972343461200F5616A /* RxGesture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FAFC962343461200F5616A /* RxGesture.framework */; };
@@ -106,7 +105,6 @@
 		086510F2230ABD0E008B8DB6 /* InitialViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialViewModel.swift; sourceTree = "<group>"; };
 		087C68CC230CFCE2006D66B5 /* ServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProtocol.swift; sourceTree = "<group>"; };
 		087C68CE230CFD74006D66B5 /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
-		087C68D0230D0053006D66B5 /* MockInitialViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockInitialViewDelegate.swift; sourceTree = "<group>"; };
 		087C68F9230D2F4D006D66B5 /* StoreProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreProtocol.swift; sourceTree = "<group>"; };
 		087C68FB230D2F5A006D66B5 /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		087C6901230D3110006D66B5 /* gHubChat.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = gHubChat.xcdatamodel; sourceTree = "<group>"; };
@@ -207,7 +205,6 @@
 				086510D5230AA401008B8DB6 /* Info.plist */,
 				086510D3230AA401008B8DB6 /* InitialViewModelTests.swift */,
 				08DCAEC6230C691B001D9BC3 /* MessageViewModelTests.swift */,
-				087C68D0230D0053006D66B5 /* MockInitialViewDelegate.swift */,
 				087C6903230D577C006D66B5 /* StoreTests.swift */,
 			);
 			path = gHubChatTests;
@@ -503,7 +500,6 @@
 			files = (
 				08CC8E3923119307004C9157 /* InitialViewModelTests.swift in Sources */,
 				08CC8E3A23119307004C9157 /* MessageViewModelTests.swift in Sources */,
-				08CC8E3B23119307004C9157 /* MockInitialViewDelegate.swift in Sources */,
 				08CC8E3C23119307004C9157 /* StoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

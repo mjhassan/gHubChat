@@ -6,6 +6,8 @@
 //  Copyright © 2019 Jahid Hassan. All rights reserved.
 //
 
+// https://saadeloulladi.com/ios-swift-mvvm-rxswift-unit-testing/
+
 import Foundation
 import RxRelay
 import RxSwift
@@ -13,22 +15,25 @@ import RxSwift
 class InitialViewModel: InitialViewModelProtocol {
     private let URL_TEMP: String = "https://api.github.com/users?since="
     private var startId: Int = 0
+    private let service: ServiceProtocol
+    
     private let users: BehaviorRelay<[User]>    = BehaviorRelay(value: [])
     let list: BehaviorRelay<[User]>             = BehaviorRelay(value: [])
     let query: BehaviorRelay<String>            = BehaviorRelay(value: "")
     let isLoading:PublishSubject<Bool>          = PublishSubject<Bool>()
+    let disposeBag                              = DisposeBag()
     
-    public var userCount: Int {
+    var userCount: Int {
         return list.value.count
     }
     
-    public var lastUserId: Int {
+    var lastUserId: Int {
         return user(at: userCount-1)?.id ?? startId
     }
     
-    let disposeBag = DisposeBag()
-    
-    init() {
+    init(service: ServiceProtocol = Services()) {
+        self.service = service
+        
         query
             .asObservable()
             .subscribe(onNext: { [weak self] txt in
@@ -46,7 +51,7 @@ class InitialViewModel: InitialViewModelProtocol {
         }
         
         isLoading.onNext(true)
-        Services().get(url: url) { [weak self] result in
+        service.get(url: url) { [weak self] result in
             guard let _ws = self else { return }
             
             _ws.isLoading.onNext(false)
@@ -66,6 +71,17 @@ class InitialViewModel: InitialViewModelProtocol {
     func user(at index: Int) -> User? {
         return (index >= 0 && index < userCount) ? list.value[index]:nil
     }
+    
+    /*
+     func user(at index: Int) -> Observable<User?> {
+         return Observable.create { [weak self] observer -> Disposable in
+             observer.onNext(self?.list.value[index])
+             observer.onCompleted()
+             
+             return Disposables.create()
+         }
+     }
+     */
     
     private func decode(data: Data) -> [User] {
         do {

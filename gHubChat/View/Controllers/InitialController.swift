@@ -40,8 +40,8 @@ class InitialController: UIViewController {
         return UIBarButtonItem(customView: label)
     }()
     
-    private lazy var viewModel: InitialViewModel = {
-        let viewModel = InitialViewModel()
+    private lazy var viewModel: InitialViewModelProtocol = {
+        let viewModel = InitialViewModel(service: Services())
         
         return viewModel
     }()

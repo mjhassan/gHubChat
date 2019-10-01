@@ -9,18 +9,33 @@
 import XCTest
 @testable import gHubChat
 
-class InitialViewModelTests: XCTestCase {
+class FakeServices: ServiceProtocol {
+    let fakeData = """
+        [
+            {
+                "login": "x",
+                "id": 1,
+                "avatar_url": "https://google.com/",
+            }
+        ]
+    """
+    
+    func get(url: URL, callback: @escaping (Result<Data, NetworkError>) -> Void) {
+        callback(.failure(.forbidden))
+        callback(.failure(.noData))
+        callback(.failure(.error("Custom error")))
+        callback(.success(fakeData.data(using: .utf8)!))
+    }
+}
 
-    fileprivate var delegate : MockInitialViewDelegate!
+class InitialViewModelTests: XCTestCase {
     fileprivate var mockedVM : InitialViewModelProtocol!
     
     override func setUp() {
-        delegate = MockInitialViewDelegate()
-//        mockedVM = InitialViewModel(bind: delegate)
+        mockedVM = InitialViewModel(service: FakeServices())
     }
 
     override func tearDown() {
-        delegate = nil
         mockedVM = nil
     }
 
@@ -32,8 +47,6 @@ class InitialViewModelTests: XCTestCase {
 
     func test_dataFetching() {
         mockedVM.loadData()
-        
-        XCTAssertTrue(delegate.calledWillStartNetworkActivity, "Activity will show on data fetch")
         
         let URL_TEMP: String = "https://api.github.com/users?since="
         let expectation = XCTestExpectation(description: "Fetch user list from github")
