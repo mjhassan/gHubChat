@@ -18,7 +18,7 @@ protocol MessageViewModelProtocol {
     var disposeBag: DisposeBag  { get }
 
     
-    init(buddy: User)
+    init(buddy: User, store: StoreProtocol)
     func loadStoreMessage()
     func message(at index: Int) -> Message?
     func sendMessage(_ msg: String)

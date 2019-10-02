@@ -18,6 +18,7 @@ class MessageViewModel: MessageViewModelProtocol {
     let disposeBag                          = DisposeBag()
     
     private let contact: BehaviorRelay<User>!
+    private let store: StoreProtocol
     
     private var messageCount: Int {
         return messages.value.count
@@ -35,13 +36,15 @@ class MessageViewModel: MessageViewModelProtocol {
         return contact.value.avatar_url
     }
     
-    required init(buddy: User) {
-        contact = BehaviorRelay(value: buddy)
+    required init(buddy: User, store: StoreProtocol = Store.shared) {
+        self.contact = BehaviorRelay(value: buddy)
+        self.store   = store
+        
         title.accept("@\(buddy.login)")
     }
     
     func loadStoreMessage() {
-        let history = Store.shared.getMessages(id: contactId)
+        let history = store.getMessages(id: contactId)
         messages.accept(messages.value + history)
         
         updatedLastIndex()
@@ -86,8 +89,8 @@ class MessageViewModel: MessageViewModelProtocol {
     private func updateMessages(_ chat: Message) {
         self.messages.accept(messages.value + [chat])
         
-        Store.shared.saveMessage(messages.value, for: contactId)
-        Store.shared.saveLastMessage(chat.text, for: contactId)
+        store.saveMessage(messages.value, for: contactId)
+        store.saveLastMessage(chat.text, for: contactId)
         
         updatedLastIndex()
     }

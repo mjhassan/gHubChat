@@ -162,5 +162,18 @@ private extension InitialController {
                 self?.searchBar.resignFirstResponder()
         }
         .disposed(by: viewModel.disposeBag)
+        
+        viewModel.error
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: {[weak self] error in
+                let alert = UIAlertController(title: "ERROR",
+                                              message: error.localizedDescription,
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK",
+                                              style: .cancel,
+                                              handler: nil))
+                self?.present(alert, animated: true, completion: nil)
+            })
+            .disposed(by: viewModel.disposeBag)
     }
 }

@@ -10,29 +10,12 @@
 // https://medium.com/vincit/unit-testing-rxswift-application-f0c6ea460429
 
 import XCTest
+import RxSwift
 @testable import gHubChat
-
-class FakeServices: ServiceProtocol {
-    let fakeData = """
-        [
-            {
-                "login": "x",
-                "id": 1,
-                "avatar_url": "https://google.com/",
-            }
-        ]
-    """
-    
-    func get(url: URL, callback: @escaping (Result<Data, NetworkError>) -> Void) {
-        callback(.failure(.forbidden))
-        callback(.failure(.noData))
-        callback(.failure(.error("Custom error")))
-        callback(.success(fakeData.data(using: .utf8)!))
-    }
-}
 
 class InitialViewModelTests: XCTestCase {
     fileprivate var mockedVM : InitialViewModelProtocol!
+    fileprivate let disposeBag = DisposeBag()
     
     override func setUp() {
         mockedVM = InitialViewModel(service: FakeServices())
@@ -48,6 +31,88 @@ class InitialViewModelTests: XCTestCase {
         XCTAssertNil(mockedVM.user(at: 0), "User list should be empty.")
     }
 
+    func test_forbidderFetching() {
+        mockedVM.error
+            .subscribe(onNext: { [weak self] error in
+                XCTAssertEqual(error, NetworkError.forbidden)
+                XCTAssertEqual(self?.mockedVM.list.value.count, 0, "User should be empty as no data is loaded.")
+            })
+            .disposed(by: disposeBag)
+        
+        mockedVM.loadData(FakeServices.URLFlag.forbibben.hashValue)
+    }
+    
+    func test_noDataFetching() {
+        mockedVM.error
+            .subscribe(onNext: { [weak self] error in
+                XCTAssertEqual(error, NetworkError.noData)
+                XCTAssertEqual(self?.mockedVM.list.value.count, 0, "User should be empty as no data is loaded.")
+            })
+            .disposed(by: disposeBag)
+        
+        mockedVM.loadData(FakeServices.URLFlag.noData.hashValue)
+    }
+    
+    func test_customErrorFetching() {
+        mockedVM.error
+            .subscribe(onNext: { [weak self] error in
+                XCTAssertEqual(error, NetworkError.error("Custom error"))
+                XCTAssertEqual(self?.mockedVM.list.value.count, 0, "User should be empty as no data is loaded.")
+            })
+            .disposed(by: disposeBag)
+        
+        mockedVM.loadData(FakeServices.URLFlag.error.hashValue)
+    }
+    
+    func test_dataFetching() {
+        var onNextCalled = 0
+        var onErrorCalled = 0
+        var onCompletedCalled = 0
+        var onDisposedCalled = 0
+        
+        mockedVM.error
+            .subscribe(onNext: { n in
+                    onNextCalled += 1
+                }, onError: { e in
+                    onErrorCalled += 1
+                }, onCompleted: {
+                    onCompletedCalled += 1
+                }, onDisposed: {
+                    onDisposedCalled += 1
+                })
+            .disposed(by: disposeBag)
+        
+            XCTAssertTrue(onNextCalled == 0)
+            XCTAssertTrue(onErrorCalled == 0)
+            XCTAssertTrue(onCompletedCalled == 0)
+            XCTAssertTrue(onDisposedCalled == 0)
+        
+        mockedVM.isLoading
+            .subscribe(onNext: { n in
+                    onNextCalled += 1
+                }, onError: { e in
+                    onErrorCalled += 1
+                }, onCompleted: {
+                    onCompletedCalled += 1
+                }, onDisposed: {
+                    onDisposedCalled += 1
+                })
+            .disposed(by: disposeBag)
+        
+            XCTAssertTrue(onNextCalled == 2)
+            XCTAssertTrue(onErrorCalled == 0)
+            XCTAssertTrue(onCompletedCalled == 0)
+            XCTAssertTrue(onDisposedCalled == 0)
+        
+
+        XCTAssertEqual(mockedVM.userCount, 1, "There should have one user.")
+        XCTAssertEqual(mockedVM.lastUserId, 1)
+        XCTAssertEqual(mockedVM.user(at: 0)?.avatar_url, "https://google.com/", "User list should be empty.")
+        
+        mockedVM.loadData(FakeServices.URLFlag.data.hashValue)
+    }
+    
+    /*
     func test_dataFetching() {
         mockedVM.loadData()
         
@@ -71,4 +136,5 @@ class InitialViewModelTests: XCTestCase {
         
         wait(for: [expectation], timeout: 60.0)
     }
+ */
 }

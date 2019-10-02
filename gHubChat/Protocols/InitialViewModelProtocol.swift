@@ -14,6 +14,7 @@ protocol InitialViewModelProtocol {
     var list: BehaviorRelay<[User]> { get }
     var query: BehaviorRelay<String> { get }
     var isLoading:PublishSubject<Bool> { get }
+    var error: PublishSubject<NetworkError> { get }
     var userCount: Int { get }
     var lastUserId: Int { get }
     var disposeBag: DisposeBag { get }

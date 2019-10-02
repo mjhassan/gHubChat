@@ -13,8 +13,6 @@ protocol StoreProtocol {
     static var shared: StoreProtocol { get }
     
     // core data support
-    var persistentContainer: NSPersistentContainer { get }
-    
     func saveContext ()
     func saveMessage(_ message: [Message], for user: Int)
     func getMessages(id: Int) -> [Message]

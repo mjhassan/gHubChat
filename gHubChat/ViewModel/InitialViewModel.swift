@@ -19,6 +19,7 @@ class InitialViewModel: InitialViewModelProtocol {
     let list: BehaviorRelay<[User]>             = BehaviorRelay(value: [])
     let query: BehaviorRelay<String>            = BehaviorRelay(value: "")
     let isLoading:PublishSubject<Bool>          = PublishSubject<Bool>()
+    let error: PublishSubject<NetworkError>     = PublishSubject<NetworkError>()
     let disposeBag                              = DisposeBag()
     
     var userCount: Int {
@@ -61,7 +62,7 @@ class InitialViewModel: InitialViewModelProtocol {
                     _ws.users.accept(_ws.users.value + _users)
                     _ws.query.accept("")
                 case .failure(let error):
-                    print(error)
+                    _ws.error.onNext(error)
             }
         }
     }

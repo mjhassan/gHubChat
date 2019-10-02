@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		08439178231BBB38003FA477 /* URLCacheExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08439177231BBB38003FA477 /* URLCacheExtensions.swift */; };
+		088099EB234459F000A7100D /* FakeServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088099EA234459F000A7100D /* FakeServices.swift */; };
+		088099ED2344710200A7100D /* FakeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088099EC2344710200A7100D /* FakeStore.swift */; };
 		08BB26FA2341BD66008CEA20 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BB26F92341BD66008CEA20 /* Errors.swift */; };
 		08BB26FB2341E09E008CEA20 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F42340C8160081F588 /* RxCocoa.framework */; };
 		08BB26FC2341E09E008CEA20 /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 081DE3F42340C8160081F588 /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -109,6 +111,8 @@
 		087C68FB230D2F5A006D66B5 /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		087C6901230D3110006D66B5 /* gHubChat.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = gHubChat.xcdatamodel; sourceTree = "<group>"; };
 		087C6903230D577C006D66B5 /* StoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreTests.swift; sourceTree = "<group>"; };
+		088099EA234459F000A7100D /* FakeServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeServices.swift; sourceTree = "<group>"; };
+		088099EC2344710200A7100D /* FakeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeStore.swift; sourceTree = "<group>"; };
 		08AC8BD0230AEF1000E95F5F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		08BB26F92341BD66008CEA20 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		08CC767023117B2B0026431F /* gHubChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gHubChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -206,6 +210,8 @@
 				086510D3230AA401008B8DB6 /* InitialViewModelTests.swift */,
 				08DCAEC6230C691B001D9BC3 /* MessageViewModelTests.swift */,
 				087C6903230D577C006D66B5 /* StoreTests.swift */,
+				088099EA234459F000A7100D /* FakeServices.swift */,
+				088099EC2344710200A7100D /* FakeStore.swift */,
 			);
 			path = gHubChatTests;
 			sourceTree = "<group>";
@@ -340,6 +346,7 @@
 				08CC767F23117B380026431F /* Sources */,
 				08CC768023117B380026431F /* Frameworks */,
 				08CC768123117B380026431F /* Resources */,
+				088099EE2344B5D500A7100D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -461,6 +468,26 @@
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
+		088099EE2344B5D500A7100D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxRelay.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -498,6 +525,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				088099EB234459F000A7100D /* FakeServices.swift in Sources */,
+				088099ED2344710200A7100D /* FakeStore.swift in Sources */,
 				08CC8E3923119307004C9157 /* InitialViewModelTests.swift in Sources */,
 				08CC8E3A23119307004C9157 /* MessageViewModelTests.swift in Sources */,
 				08CC8E3C23119307004C9157 /* StoreTests.swift in Sources */,

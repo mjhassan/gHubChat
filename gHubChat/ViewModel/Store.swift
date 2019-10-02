@@ -11,15 +11,14 @@ import CoreData
 
 class Store: StoreProtocol {
     private static let instance: StoreProtocol = Store()
+    static var shared: StoreProtocol {
+        return instance
+    }
     
     private let storeName  = "gHubChat"
     private let entityName = "History"
     
     private let localStorage = UserDefaults.standard
-    
-    static var shared: StoreProtocol {
-        return instance
-    }
     
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: storeName)
