@@ -7,22 +7,34 @@
 //
 
 // https://saadeloulladi.com/ios-swift-mvvm-rxswift-unit-testing/
+// https://bit.ly/2pjgxWb
 // https://medium.com/vincit/unit-testing-rxswift-application-f0c6ea460429
+// https://github.com/RxSwiftCommunity/RxNimble/blob/master/RxNimbleTests/RxNimbleRxBlockingTests.swift
+// https://github.com/lanjing99/RxSwift2nd
 
 import XCTest
 import RxSwift
+import RxTest
 @testable import gHubChat
 
 class InitialViewModelTests: XCTestCase {
     fileprivate var mockedVM : InitialViewModelProtocol!
-    fileprivate let disposeBag = DisposeBag()
+    fileprivate var service: ServiceProtocol!
+    fileprivate var scheduler: TestScheduler!
+    fileprivate var disposeBag: DisposeBag!
     
     override func setUp() {
-        mockedVM = InitialViewModel(service: FakeServices())
+        service = FakeServices()
+        mockedVM = InitialViewModel(service: service)
+        scheduler = TestScheduler(initialClock: 0)
+        disposeBag = DisposeBag()
     }
 
     override func tearDown() {
+        service = nil
         mockedVM = nil
+        scheduler = nil
+        disposeBag = nil
     }
 
     func test_emptyViewModel() {
@@ -32,43 +44,67 @@ class InitialViewModelTests: XCTestCase {
     }
 
     func test_forbidderFetching() {
+        /*
+        let expectation_time_out_sec = 10.0
+        let expect = expectation(description: #function)
+        var result: NetworkError!
+        
         mockedVM.error
-            .subscribe(onNext: { [weak self] error in
-                XCTAssertEqual(error, NetworkError.forbidden)
-                XCTAssertEqual(self?.mockedVM.list.value.count, 0, "User should be empty as no data is loaded.")
+            .asObservable()
+            .subscribe(onNext: { error in
+                result = error
+                expect.fulfill()
             })
             .disposed(by: disposeBag)
         
-        mockedVM.loadData(FakeServices.URLFlag.forbibben.hashValue)
+        waitForExpectations(timeout: expectation_time_out_sec) { [unowned self] error in
+            guard error == nil else {
+                XCTFail(error!.localizedDescription)
+                return
+            }
+            
+            XCTAssertEqual(result, NetworkError.forbidden)
+            XCTAssertEqual(self.mockedVM.list.value.count, 0, "User should be empty as no data is loaded.")
+        }
+        */
+        
+        mockedVM.error
+        .subscribe(onNext: { [unowned self] error in
+            XCTAssertEqual(error, NetworkError.forbidden)
+            XCTAssertEqual(self.mockedVM.list.value.count, 0, "User should be empty as no data is loaded.")
+        })
+        .disposed(by: disposeBag)
+        
+        mockedVM.loadData(FakeServices.URLFlag.forbibben.rawValue)
     }
     
     func test_noDataFetching() {
         mockedVM.error
-            .subscribe(onNext: { [weak self] error in
+            .subscribe(onNext: { [unowned self] error in
                 XCTAssertEqual(error, NetworkError.noData)
-                XCTAssertEqual(self?.mockedVM.list.value.count, 0, "User should be empty as no data is loaded.")
+                XCTAssertEqual(self.mockedVM.list.value.count, 0, "User should be empty as no data is loaded.")
             })
             .disposed(by: disposeBag)
         
-        mockedVM.loadData(FakeServices.URLFlag.noData.hashValue)
+        mockedVM.loadData(FakeServices.URLFlag.noData.rawValue)
     }
     
     func test_customErrorFetching() {
         mockedVM.error
-            .subscribe(onNext: { [weak self] error in
+            .subscribe(onNext: { [unowned self] error in
                 XCTAssertEqual(error, NetworkError.error("Custom error"))
-                XCTAssertEqual(self?.mockedVM.list.value.count, 0, "User should be empty as no data is loaded.")
+                XCTAssertEqual(self.mockedVM.list.value.count, 0, "User should be empty as no data is loaded.")
             })
             .disposed(by: disposeBag)
         
-        mockedVM.loadData(FakeServices.URLFlag.error.hashValue)
+        mockedVM.loadData(FakeServices.URLFlag.error.rawValue)
     }
     
     func test_dataFetching() {
-        var onNextCalled = 0
-        var onErrorCalled = 0
-        var onCompletedCalled = 0
-        var onDisposedCalled = 0
+        var onNextCalled        = 0
+        var onErrorCalled       = 0
+        var onCompletedCalled   = 0
+        var onDisposedCalled    = 0
         
         mockedVM.error
             .subscribe(onNext: { n in
@@ -82,10 +118,15 @@ class InitialViewModelTests: XCTestCase {
                 })
             .disposed(by: disposeBag)
         
-            XCTAssertTrue(onNextCalled == 0)
-            XCTAssertTrue(onErrorCalled == 0)
-            XCTAssertTrue(onCompletedCalled == 0)
-            XCTAssertTrue(onDisposedCalled == 0)
+        XCTAssertTrue(onNextCalled == 0)
+        XCTAssertTrue(onErrorCalled == 0)
+        XCTAssertTrue(onCompletedCalled == 0)
+        XCTAssertTrue(onDisposedCalled == 0)
+        
+        onNextCalled        = 0
+        onErrorCalled       = 0
+        onCompletedCalled   = 0
+        onDisposedCalled    = 0
         
         mockedVM.isLoading
             .subscribe(onNext: { n in
@@ -99,17 +140,16 @@ class InitialViewModelTests: XCTestCase {
                 })
             .disposed(by: disposeBag)
         
-            XCTAssertTrue(onNextCalled == 2)
-            XCTAssertTrue(onErrorCalled == 0)
-            XCTAssertTrue(onCompletedCalled == 0)
-            XCTAssertTrue(onDisposedCalled == 0)
+        mockedVM.loadData(FakeServices.URLFlag.data.rawValue)
         
+        XCTAssertTrue(onNextCalled == 2)
+        XCTAssertTrue(onErrorCalled == 0)
+        XCTAssertTrue(onCompletedCalled == 0)
+        XCTAssertTrue(onDisposedCalled == 0)
 
         XCTAssertEqual(mockedVM.userCount, 1, "There should have one user.")
         XCTAssertEqual(mockedVM.lastUserId, 1)
         XCTAssertEqual(mockedVM.user(at: 0)?.avatar_url, "https://google.com/", "User list should be empty.")
-        
-        mockedVM.loadData(FakeServices.URLFlag.data.hashValue)
     }
     
     /*

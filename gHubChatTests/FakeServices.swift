@@ -20,13 +20,13 @@ class FakeServices: ServiceProtocol {
         var url: URL {
             switch self {
             case .forbibben:
-                return URL(string: "https://api.github.com/users?since=\(URLFlag.forbibben)")!
+                return URL(string: "https://api.github.com/users?since=\(URLFlag.forbibben.rawValue)")!
             case .noData:
-                return URL(string: "https://api.github.com/users?since=\(URLFlag.noData)")!
+                return URL(string: "https://api.github.com/users?since=\(URLFlag.noData.rawValue)")!
             case .error:
-                return URL(string: "https://api.github.com/users?since=\(URLFlag.error)")!
+                return URL(string: "https://api.github.com/users?since=\(URLFlag.error.rawValue)")!
             case .data:
-                return URL(string: "https://api.github.com/users?since=\(URLFlag.data)")!
+                return URL(string: "https://api.github.com/users?since=\(URLFlag.data.rawValue)")!
             }
         }
     }
@@ -47,10 +47,12 @@ class FakeServices: ServiceProtocol {
             callback(.failure(.forbidden))
         case FetchURL.noData.url:
             callback(.failure(.noData))
+        case FetchURL.error.url:
+            callback(.failure(.error("Custom error")))
         case FetchURL.data.url:
             callback(.success(fakeData.data(using: .utf8)!))
         default:
-            callback(.failure(.error("Custom error")))
+            fatalError("ERROR: unintendent url \"\(url)\"")
         }
     }
 }
