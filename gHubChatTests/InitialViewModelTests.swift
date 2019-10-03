@@ -149,7 +149,7 @@ class InitialViewModelTests: XCTestCase {
 
         XCTAssertEqual(mockedVM.userCount, 1, "There should have one user.")
         XCTAssertEqual(mockedVM.lastUserId, 1)
-        XCTAssertEqual(mockedVM.user(at: 0)?.avatar_url, "https://google.com/", "User list should be empty.")
+        XCTAssertEqual(mockedVM.user(at: 0)?.avatar_url, FakeServices.avater_url, "User list should be empty.")
     }
     
     /*

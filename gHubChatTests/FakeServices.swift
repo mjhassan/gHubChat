@@ -31,15 +31,18 @@ class FakeServices: ServiceProtocol {
         }
     }
     
-    let fakeData = """
-        [
-            {
-                "login": "x",
-                "id": 1,
-                "avatar_url": "https://google.com/",
-            }
-        ]
-    """
+    static let avater_url = "https://google.com/"
+    var fakeData: Data {
+        return """
+            [
+                {
+                    "login": "x",
+                    "id": 1,
+            "avatar_url": "\(FakeServices.avater_url)",
+                }
+            ]
+            """.data(using: .utf8)!
+    }
     
     func get(url: URL, callback: @escaping (Result<Data, NetworkError>) -> Void) {
         switch url {
@@ -50,7 +53,7 @@ class FakeServices: ServiceProtocol {
         case FetchURL.error.url:
             callback(.failure(.error("Custom error")))
         case FetchURL.data.url:
-            callback(.success(fakeData.data(using: .utf8)!))
+            callback(.success(fakeData))
         default:
             fatalError("ERROR: unintendent url \"\(url)\"")
         }
