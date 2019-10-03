@@ -12,4 +12,13 @@ enum NetworkError: Error, Equatable {
     case error(String)
     case forbidden
     case noData
+    
+    var description: String {
+        switch self {
+        case let .error(_description):
+            return _description
+        default:
+            return localizedDescription
+        }
+    }
 }

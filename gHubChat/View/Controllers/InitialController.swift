@@ -167,7 +167,7 @@ private extension InitialController {
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: {[weak self] error in
                 let alert = UIAlertController(title: "ERROR",
-                                              message: error.localizedDescription,
+                                              message: error.description,
                                               preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK",
                                               style: .cancel,
