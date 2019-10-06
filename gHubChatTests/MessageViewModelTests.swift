@@ -25,6 +25,7 @@ class MessageViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
+        mockStore = nil
         mockedVM = nil
     }
     
