@@ -15,7 +15,7 @@ protocol MessageViewModelProtocol {
     
     var username: String { get }
     
-    init(buddy: User)
+    init(buddy: User, store: StoreProtocol)
     
     func loadStoreMessage()
     
@@ -24,4 +24,8 @@ protocol MessageViewModelProtocol {
     func sendMessage(_ msg: String)
     
     func layoutUpdated()
+}
+
+extension MessageViewModelProtocol {
+    init(buddy: User) { self.init(buddy: buddy, store: Store.shared) }
 }

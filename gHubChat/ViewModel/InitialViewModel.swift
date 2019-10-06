@@ -14,6 +14,7 @@ class InitialViewModel: InitialViewModelProtocol {
     private var startId: Int = 0
     private var users: [User] = []
     private var list: [User] = []
+    private let service: ServiceProtocol!
     
     public var userCount: Int {
         return list.count
@@ -30,8 +31,9 @@ class InitialViewModel: InitialViewModelProtocol {
         }
     }
     
-    required init(bind delegate: InitialViewDelegate?) {
+    required init(bind delegate: InitialViewDelegate?, service: ServiceProtocol) {
         self.delegate = delegate
+        self.service = service
     }
     
     func loadData(_ startId: Int? = 0) {
@@ -45,7 +47,7 @@ class InitialViewModel: InitialViewModelProtocol {
         
         delegate?.willStartNetworkActivity()
         
-        Services().get(url: url) { [weak self] result in
+        service.get(url: url) { [weak self] result in
             switch result {
             case .success(let data):
                 self?.decode(data: data)

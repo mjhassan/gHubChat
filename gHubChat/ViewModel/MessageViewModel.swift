@@ -11,6 +11,7 @@ import Foundation
 class MessageViewModel: MessageViewModelProtocol {
     private let contact: User
     private(set) var messages: [Message] = []
+    private let store: StoreProtocol!
     
     public var onUpdateMessage: ((IndexPath)->Void)? = nil
     
@@ -26,12 +27,13 @@ class MessageViewModel: MessageViewModelProtocol {
         return IndexPath(item: self.messages.count - 1, section: 0)
     }
     
-    required init(buddy: User) {
+    required init(buddy: User, store: StoreProtocol) {
         self.contact = buddy
+        self.store = store
     }
     
     func loadStoreMessage() {
-        let history = Store.shared.getMessages(id: contact.id)
+        let history = store.getMessages(id: contact.id)
         messages.append(contentsOf: history)
     }
     
@@ -68,8 +70,8 @@ class MessageViewModel: MessageViewModelProtocol {
     private func updateMessages(_ chat: Message) {
         self.messages.append(chat)
         
-        Store.shared.saveMessage(messages, for: contact.id)
-        Store.shared.saveLastMessage(chat.text, for: contact.id)
+        store.saveMessage(messages, for: contact.id)
+        store.saveLastMessage(chat.text, for: contact.id)
         
         onUpdateMessage?(lastIndexPath)
     }

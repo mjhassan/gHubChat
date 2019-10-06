@@ -13,9 +13,7 @@ enum NetworkError: Error {
 }
 
 class Services: ServiceProtocol {
-    typealias Callback = (Result<Data, Error>) -> Void
-    
-    func get( url: URL, completion: @escaping Callback ) {
+    func get( url: URL, completion: @escaping (Result<Data, Error>) -> Void) {
         let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 30)
         URLSession.shared.dataTask(with: request) { (data, _, error) in
             guard let data = data, error == nil else {

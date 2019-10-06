@@ -9,6 +9,5 @@
 import Foundation
 
 protocol ServiceProtocol {
-    associatedtype Callback
-    func get( url: URL, completion: Callback)
+    func get( url: URL, completion: @escaping (Result<Data, Error>) -> Void)
 }
