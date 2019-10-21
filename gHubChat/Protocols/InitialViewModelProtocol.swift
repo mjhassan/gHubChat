@@ -8,15 +8,13 @@
 
 import Foundation
 
-protocol InitialViewModelProtocol {
-    var userCount: Int { get }
+protocol InitialViewModelProtocol: ObservableObject {
+    var isEmpty: Bool { get }
     var lastUserId: Int { get }
     var filter: String { get set }
-    
-    init(bind delegate: InitialViewDelegate?)
+    var list: [User] { get }
     
     func loadData(_ startId: Int?)
-    func user(at index: Int) -> User?
 }
 
 extension InitialViewModelProtocol {

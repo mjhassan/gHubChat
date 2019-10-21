@@ -26,7 +26,7 @@ class InitialController: UIViewController {
         searchBar.placeholder = "Search..."
         searchBar.sizeToFit()
         searchBar.isTranslucent = false
-        searchBar.backgroundImage = AppDelegate.background
+        searchBar.backgroundImage = UIImage(named: "launch-background")
         searchBar.autocapitalizationType = .none
         searchBar.returnKeyType = .done
         searchBar.delegate = self
@@ -77,7 +77,7 @@ private extension InitialController {
     func configureView() {
         navigationItem.leftBarButtonItem = titleView
         
-        tableView.backgroundView = UIImageView(image: AppDelegate.background)
+        tableView.backgroundView = UIImageView(image: UIImage(named: "launch-background"))
         tableView.tableHeaderView = searchBar
         tableView.tableFooterView = UIView()
         tableView.setContentOffset(CGPoint(x: 0, y: searchBar.bounds.height), animated: false)

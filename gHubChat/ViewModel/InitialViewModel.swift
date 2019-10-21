@@ -7,34 +7,42 @@
 //
 
 import Foundation
+import Combine
 
 class InitialViewModel: InitialViewModelProtocol {
-    private let delegate: InitialViewDelegate?
+//    private let delegate: InitialViewDelegate?
     private let URL_TEMP: String = "https://api.github.com/users?since="
     private var startId: Int = 0
     private var users: [User] = []
-    private var list: [User] = []
+    var list: [User] = [] {
+       didSet {
+           didChange.send(())
+       }
+   }
     
-    public var userCount: Int {
-        return list.count
+    var isEmpty: Bool {
+        return users.isEmpty
     }
     
     public var lastUserId: Int {
-        return user(at: userCount-1)?.id ?? startId
+        return list.last?.id ?? startId
     }
     
     public var filter: String = "" {
         didSet {
             filterUser()
-            delegate?.didUpdatedData()
+//            delegate?.didUpdatedData()
         }
     }
     
-    required init(bind delegate: InitialViewDelegate?) {
-        self.delegate = delegate
-    }
+    var didChange = PassthroughSubject<Void, Never>()
     
     func loadData(_ startId: Int? = 0) {
+        users.append(contentsOf: userData)
+        filterUser()
+        
+        return
+        
         if let _id = startId {
             self.startId = _id
         }
@@ -43,32 +51,32 @@ class InitialViewModel: InitialViewModelProtocol {
             return
         }
         
-        delegate?.willStartNetworkActivity()
+//        delegate?.willStartNetworkActivity()
         
         Services().get(url: url) { [weak self] result in
             switch result {
             case .success(let data):
-                self?.decode(data: data)
+                if let _users = self?.decode(data: data) {
+                    self?.users.append(contentsOf: _users)
+                    self?.filterUser()
+                }
             case .failure(let err):
-                self?.delegate?.didFailedWithError(err)
+//                self?.delegate?.didFailedWithError(err)
+                print(err)
             }
         }
     }
     
-    func user(at index: Int) -> User? {
-        return (index >= 0 && index < userCount) ? list[index]:nil
-    }
-    
-    private func decode(data: Data) {
+    private func decode(data: Data) -> [User] {
         do {
-            let models = try JSONDecoder().decode([User].self, from: data)
-            self.users.append(contentsOf:models)
+            return try JSONDecoder().decode([User].self, from: data)
             
-            filterUser()
-            self.delegate?.didUpdatedData()
+//            self.delegate?.didUpdatedData()
         } catch let err {
-            self.delegate?.didFailedWithError(err)
+//            self.delegate?.didFailedWithError(err)
         }
+        
+        return []
     }
     
     private func filterUser() {
